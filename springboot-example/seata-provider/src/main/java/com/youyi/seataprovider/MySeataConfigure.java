@@ -2,14 +2,12 @@ package com.youyi.seataprovider;
 
 import io.seata.common.util.StringUtils;
 import io.seata.core.context.RootContext;
-import io.seata.core.exception.TransactionException;
-import io.seata.core.model.BranchType;
-import io.seata.integration.http.JakartaTransactionPropagationInterceptor;
-import io.seata.integration.http.TransactionPropagationInterceptor;
 import io.seata.tm.api.GlobalTransactionContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.shardingsphere.transaction.base.seata.at.SeataTransactionHolder;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -22,7 +20,7 @@ public class MySeataConfigure implements WebMvcConfigurer {
     }
 
     static class ShardingSphereInterceptor implements HandlerInterceptor {
-        public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws TransactionException {
+        public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
             String xid = RootContext.getXID();
             if (xid == null) {
                 xid = request.getHeader(RootContext.KEY_XID);

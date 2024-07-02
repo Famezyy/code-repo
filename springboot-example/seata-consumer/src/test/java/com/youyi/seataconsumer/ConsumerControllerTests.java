@@ -1,23 +1,16 @@
 package com.youyi.seataconsumer;
 
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Ports;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.MySQLContainer;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@SuppressWarnings({"SqlDialectInspection", "SqlNoDataSourceInspection"})
 public class ConsumerControllerTests extends AbstractTests {
 
     /**
@@ -39,11 +32,11 @@ public class ConsumerControllerTests extends AbstractTests {
      *     datasource3307: id(1), money(300.0)
      */
     @Test
-    void testConsumerController() throws Exception {
-        Assertions.assertThrows(ArithmeticException.class, () -> consumerController.consume(1L));
-        Assertions.assertEquals(100.0, getMoney(dataSource3306()));
+    void testConsumerController() {
+        assertThrows(ArithmeticException.class, () -> consumerController.consume(1L));
+        assertEquals(100.0, getMoney(dataSource3306()));
         // the below assertion will fail
-        Assertions.assertEquals(100.0, getMoney(dataSource3307()));
+        assertEquals(100.0, getMoney(dataSource3307()));
     }
 
     private double getMoney(DataSource datasource) {
@@ -52,7 +45,8 @@ public class ConsumerControllerTests extends AbstractTests {
              ResultSet resultSet = ps.executeQuery()) {
             resultSet.next();
             return resultSet.getDouble("money");
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return 0.0;
     }
 }

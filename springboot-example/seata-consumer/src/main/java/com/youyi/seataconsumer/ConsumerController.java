@@ -1,7 +1,6 @@
 package com.youyi.seataconsumer;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,23 +8,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
 @RestController
 public class ConsumerController {
 
-    @Autowired
-    AccountMapper accountMapper;
+    final AccountMapper accountMapper;
 
-    @Autowired
-    RestTemplate restTemplate;
+    final RestTemplate restTemplate;
 
     @Value("${provider.port}")
     String port;
 
+    public ConsumerController(AccountMapper accountMapper, RestTemplate restTemplate) {
+        this.accountMapper = accountMapper;
+        this.restTemplate = restTemplate;
+    }
 
+    @SuppressWarnings({"NumericOverflow", "divzero", "unused"})
     @GetMapping("consume")
     @Transactional
     public String consume(Long id) {

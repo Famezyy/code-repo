@@ -26,5 +26,4 @@ public class SeataConsumerApplicationTests {
                 .mainClass("org.springframework.boot.loader.launch.JarLauncher")
                 .classpath(cp -> cp.files("../seata-provider/build/libs/seata-provider-shardingsphere-sb-0.0.1-SNAPSHOT.jar"));
     }
-
 }
